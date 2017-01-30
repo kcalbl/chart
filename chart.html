@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>VOD新增用户性别分析</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+	</head>
+
+	<body style="background-color: #eff0f5;">
+		<canvas id="chart2" style="display: block;margin: 0px auto;"></canvas>
+
+		<script type="text/javascript">
+			var chart2 = document.getElementById("chart2");
+			var context = chart2.getContext("2d");
+			var width = 50;
+			var height = 20;
+			var radius = 5;
+
+			$.get("https://wx.youngon.com.cn/request/forum/users", function(datas) {
+				$("#res").html(datas.users.length);
+				var sum = datas.users.length;
+				var i = 0;
+				var man = 0;
+				var woman = 0;
+				var uk = 0;
+
+				while(datas.users[i]) {
+					switch(datas.users[i].sex) {
+						case 0:
+							datas.users[i].sex = "未知";
+							uk++;
+							break;
+						case 1:
+							datas.users[i].sex = "男";
+							man++;
+							break;
+						case 2:
+							datas.users[i].sex = "女";
+							woman++;
+							break;
+						default:
+							datas.users[i].sex = "未知";
+							uk++;
+							break;
+					}
+
+					i++;
+				}
+
+				var radian1 = woman / sum;
+				var radian2 = uk / sum;
+				var radian3 = man / sum;
+
+				round(633, 340, 200, 2 * Math.PI * (radian1 + radian2), 2 * Math.PI * (radian1 + radian2 + radian3), "#c23531");
+				round(633, 340, 200, 2 * Math.PI * radian1, 2 * Math.PI * (radian1 + radian2), "#61a0a8");
+				round(633, 340, 200, 0 * Math.PI, 2 * Math.PI * radian1, "#2f4554");
+
+			});
+
+			chart2.width = 1366;
+			chart2.height = 620;
+
+			context.font = "bold 20px Arial";
+			context.fillStyle = "#333333";
+			context.textAlign = "center";
+			context.fillText("VOD新增用户性别分析", 633, 50);
+
+			context.font = "bold 12px Arial";
+			context.fillStyle = "#cccccc";
+			context.textAlign = "center";
+			context.fillText("WX.YOUNGON.COM.CN", 633, 80);
+
+			context.font = "500 16px 微软雅黑";
+			context.fillStyle = "#333333";
+			context.fillText("男", 120, 65);
+
+			context.font = "500 16px 微软雅黑";
+			context.fillStyle = "#333333";
+			context.fillText("女", 120, 115);
+
+			context.font = "500 16px 微软雅黑";
+			context.fillStyle = "#333333";
+			context.fillText("未知", 128, 165);
+
+			
+			var roundArr={
+				"rx":50,
+				"ry":[50,100,150],
+				"widthR":50,
+				"heightR":20,
+				"radius":5, 
+				"color":["#c23531","#2f4554","#61a0a8"],
+			}
+			
+			
+
+			var lineArr = {
+				"sx": [443, 419, 621, 601, 807, 829],
+				"sy": [292, 259, 538, 570, 245, 215],
+				"ex": [418, 398, 600, 580, 830, 850],
+				"ey": [259, 259, 570, 570, 215, 215],
+				"lineColor": ["#61a0a8", "#61a0a8", "#2f4554", "#2f4554", "#c23531", "#c23531"],
+			}
+			var txtArr = {
+				"txt": ["未知", "女", "男"],
+				"tx": [377, 566, 864],
+				"ty": [260, 574, 218],
+				"color": ["#61a0a8", "#2f4554", "#c23531"],
+				"txtF": "500 16px 微软雅黑",
+			}
+			for(var i = 0; i < lineArr.ex.length; i++) {
+				drawLine(lineArr.sx[i], lineArr.sy[i], lineArr.ex[i], lineArr.ey[i], lineArr.lineColor[i], 1)
+			}
+
+			for(var i = 0; i < txtArr.txt.length; i++) {
+				writeTxt(txtArr.txt[i], txtArr.tx[i], txtArr.ty[i], txtArr.color[i], txtArr.txtF)
+				roundRect(roundArr.rx,roundArr.ry[i],roundArr.widthR,roundArr.heightR,roundArr.radius,roundArr.color[i])
+			}
+
+		
+
+			function writeTxt(txt, tx, ty, color, txtF) {
+				context.font = txtF;
+				context.fillStyle = color;
+				context.fillText(txt, tx, ty);
+			}
+
+			function roundRect(x, y, width, height, radius, color) {
+				context.beginPath();
+				context.arc(x, y, radius, Math.PI, 1.5 * Math.PI);
+				context.lineTo(x + width, y - radius);
+				context.arc(x + width, y, radius, 1.5 * Math.PI, 2 * Math.PI, );
+				context.lineTo(x + width + radius, y + height);
+				context.arc(x + width, y + height, radius, 0, 0.5 * Math.PI);
+				context.lineTo(x, y + height + radius);
+				context.arc(x, y + height, radius, 0.5 * Math.PI, Math.PI);
+				context.lineTo(x - radius, y);
+				context.closePath();
+				context.fillStyle = color;
+				context.fill();
+
+			}
+
+			function round(cx, cy, cr, start, end, color) {
+				context.beginPath();
+				context.arc(cx, cy, cr, start, end)
+				context.lineTo(cx, cy);
+				context.closePath();
+				context.fillStyle = color;
+				context.fill();
+			}
+
+			function drawLine(sx, sy, ex, ey, color, weight) {
+				context.beginPath();
+
+				context.moveTo(sx, sy);
+
+				context.lineTo(ex, ey);
+
+				context.closePath();
+				context.lineWidth = weight;
+				context.strokeStyle = color;
+				context.stroke();
+			}
+		</script>
+	</body>
+
+</html>

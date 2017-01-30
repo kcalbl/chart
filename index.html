@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="utf-8" />
+		<title>VOD论坛新增用户分析</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+	</head>
+
+	<body style="width: 100%; height: 100%;background-color: #eff0f5;">
+		<canvas id="chart1" style="border: 1px solid #000558;display: block;margin: 0px auto;">
+			</canvas>
+
+		<script type="text/javascript">
+			var chart1 = document.getElementById("chart1");
+			var context = chart1.getContext("2d");
+			chart1.width = 1366;
+			chart1.height = 620;
+
+			drawLine(125, 445, 1226, 445, "#cccccc", 1);
+			drawLine(125, 318, 1226, 318, "#cccccc", 1);
+			drawLine(125, 191, 1226, 191, "#cccccc", 1);
+			drawLine(125, 64, 1226, 64, "#cccccc", 1);
+			drawLine(861, 62, 861, 579, "#cccccc", 1);
+			drawLine(496, 62, 496, 579, "#cccccc", 1);
+
+			drawLine(125, 445, 132, 445, "black", 1);
+			drawLine(125, 318, 131, 318, "#black", 1);
+			drawLine(125, 191, 131, 191, "#black", 1);
+			drawLine(125, 64, 131, 64, "#black", 1);
+			drawLine(861, 571, 861, 579, "#black", 1);
+			drawLine(496, 571, 496, 579, "#black", 1);
+			drawLine(1226, 571, 1226, 579, "#black", 1);
+
+			drawLine(131, 62, 132, 579, "black", 1);
+			drawLine(125, 572, 1226, 572, "blak", 1);
+			drawLine(1226, 572, 1226, 62, "#cccccc", 1);
+
+			/*$.get("https://wx.youngon.com.cn/request/forum/users", function(datas) {
+
+				var num = datas.users.length;
+				var timeR = new Array();
+				var i = 0;
+
+				while(datas.users[i]) {
+
+					timeR[i] = datas.users[i].regDate.substring(0, 10);
+
+					i++;
+				}
+
+				timeR = countNum(timeR);
+
+				var timeDate = new Array();
+				var timeCount = new Array();
+				for(var i = 0; i < timeR.length; i++) {
+					timeDate[i] = (transform(timeR[i]))[0];
+					timeCount[i] = (transform(timeR[i]))[1];
+				}
+				var timeInDate = {
+					"key": timeDate,
+					"value": timeCount
+				};
+
+				var allDate = new Array();
+				var newData = new Array();
+				var newDate = new Array();
+				var newCount = new Array();
+				var end = daysBetween(timeInDate.key[0], getNowFormatDate()) + 1;
+				for(var i = 0; i < end; i++) {
+					allDate[i] = newAdd(i, timeInDate.key[0]);
+				}
+				for(var s = 0; s < end; s++) {
+					newData[s] = {
+						"key": allDate[s],
+						"value": 0
+					};
+				}
+
+				for(var i = 0; i < end; i++) {
+					for(var j = 0; j < timeInDate.key.length; j++) {
+						if(newData[i].key === timeInDate.key[j]) {
+							newData[i].value = timeInDate.value[j];
+						}
+					}
+				}
+
+				for(var i = 0; i < newData.length; i++) {
+					newDate[i] = (transform(newData[i]))[0];
+					newCount[i] = (transform(newData[i]))[1];
+				}
+
+				var maxNum = Math.max.apply(null, newCount);
+				var unmX = newDate.length;
+				var unmY = newCount.length;
+				var unitX = 1100 / newDate.length;
+				var unitY = 510 / maxNum;
+				var xArray = new Array();
+				var yArray = new Array();
+
+				for(var x = 0; x <= unmX; x++) {
+					xArray[x] = 131 + x * unitX;
+					yArray[x] = 62 + (maxNum - newCount[x]) * unitY;
+
+					context.beginPath();
+					context.arc(xArray[x], yArray[x], 2, 0, 2 * Math.PI);
+					context.strokeStyle = "#c23531";
+					context.closePath();
+					context.fillStyle = "white";
+					context.fill();
+					context.stroke();
+
+				}
+
+				context.font = "bold 20px Arial";
+				context.fillStyle = "#333333";
+				context.fillText("VOD论坛新增用户分析 总人数：" + num, 136, 45);
+
+			})*/
+
+			var dataN = {
+				"newData1": ["2016-11-10", "2016-11-11", "2016-11-12", "2016-11-13", "2016-11-14", "2016-11-15", "2016-11-16", "2016-11-17", "2016-11-18", "2016-11-19", "2016-11-20", "2016-11-21", "2016-11-22", "2016-11-23", "2016-11-24", "2016-11-25", "2016-11-26", "2016-11-27", "2016-11-28", "2016-11-29", "2016-11-30", "2016-12-01", "2016-12-02", "2016-12-03", "2016-12-04", "2016-12-05", "2016-12-06", "2016-12-07", "2016-12-08", "2016-12-09", "2016-12-10", "2016-12-11", "2016-12-12", "2016-12-13", "2016-12-14", "2016-12-15", "2016-12-16", "2016-12-17", "2016-12-18", "2016-12-19", "2016-12-20", "2016-12-21", "2016-12-22", "2016-12-23", "2016-12-24", "2016-12-25", "2016-12-26", "2016-12-27", "2016-12-28", "2016-12-29", "2016-12-30", "2016-12-31", "2017-01-01", "2017-01-02", "2017-01-03", "2017-01-04", "2017-01-05", "2017-01-06", "2017-01-07", "2017-01-08", "2017-01-09", "2017-01-10", "2017-01-11", "2017-01-12", "2017-01-13", "2017-01-14", "2017-01-15", "2017-01-16", "2017-01-17", "2017-01-18", "2017-01-19", "2017-01-20", "2017-01-21", "2017-01-22", "2017-01-23", "2017-01-24", "2017-01-25", "2017-01-26", "2017-01-27", "2017-01-28", "2017-01-29"],
+				"newCount1": [15, 10, 0, 17, 10, 7, 13, 8, 16, 9, 2, 11, 5, 2, 9, 17, 10, 12, 3, 11, 8, 17, 6, 14, 8, 12, 7, 10, 7, 8, 12, 8, 14, 18, 11, 8, 6, 8, 15, 9, 10, 13, 4, 1, 1, 7, 15, 15, 15, 10, 15, 7, 11, 9, 16, 7, 18, 16, 16, 11, 16, 18, 9, 17, 13, 10, 8, 14, 12, 2, 5, 1, 14, 9, 2, 8, 8, 17, 5, 5, 17],
+			}
+
+			var maxNum1 = Math.max.apply(null, dataN.newCount1);
+			var unmX1 = dataN.newData1.length;
+			var unitX1 = 1100 / dataN.newCount1.length;
+			var unitY1 = 510 / maxNum1;
+			var xArray1 = new Array();
+			var yArray1 = new Array();
+			var dX = new Array();
+			var dY = new Array();
+			var yCount = new Array();
+			var dataX = Math.floor(unmX1 / 3);
+			var dataY = Math.floor(maxNum1 / 4);
+			var showX = new Array();
+			var showY = new Array();
+
+			for(var i = 0; i < unmX1; i++) {
+				xArray1[i] = 131 + i * unitX1;
+				yArray1[i] = 62 + (maxNum1 - dataN.newCount1[i]) * unitY1;
+
+				drawRound(xArray1[i], yArray1[i], 2, "#c23531")
+
+			}
+
+			for(var i = 0; i < unmX1 - 1; i++) {
+				drawLine(xArray1[i], yArray1[i], xArray1[i + 1], yArray1[i + 1], "#c23531", 1)
+			}
+
+			for(var i = 0; i < unmX1; i++) {
+				dX[i] = 131 + i * unitX1;
+			}
+
+			for(var i = 0; i < maxNum1; i++) {
+				dY[i] = 570 - i * unitY1;
+			}
+			for(var i = 0; i < 3; i++) {
+				showX[i] = 0 + i * dataX;
+			}
+			for(var i = 0; i < 4; i++) {
+				showY[i] = 0 + i * dataY;
+			}
+			for(var i = 0; i <= maxNum1; i++) {
+				yCount[i] = i;
+			}
+
+			for(var i = 0; i < 4; i++) {
+				context.font = "500 20px Arial";
+				context.textAlign = "center";
+				writeTxt(yCount[showY[i]], 100, dY[showY[i]], "black")
+			}
+
+			for(var i = 0; i < 3; i++) {
+				context.font = "500 20px Arial";
+				writeTxt(dataN.newData1[showX[i]], dX[showX[i]], 590, "black")
+			}
+
+			function drawRound(cx, cy, radius, color) {
+				context.beginPath();
+				context.arc(cx, cy, radius, 0, 2 * Math.PI);
+				context.strokeStyle = color;
+				context.closePath();
+				context.fillStyle = "white";
+				context.fill();
+				context.stroke();
+			}
+
+			function drawLine(sx, sy, ex, ey, color, weight) {
+				context.beginPath();
+
+				context.moveTo(sx, sy);
+
+				context.lineTo(ex, ey);
+
+				context.closePath();
+				context.lineWidth = weight;
+				context.strokeStyle = color;
+
+				context.stroke();
+			}
+
+			function writeTxt(txt, tx, ty, color) {
+
+				context.fillStyle = color;
+				context.fillText(txt, tx, ty);
+			}
+
+			/*function countNum(array) {
+				var count = 1;
+				var yuansu = new Array();
+				var sum = new Array();
+				for(var i = 0; i < array.length; i++) {
+					for(var j = i + 1; j < array.length; j++) {
+						if(array[i] == array[j]) {
+							count++;
+							array.splice(j, 1);
+							j--;
+						}
+					}
+					yuansu[i] = array[i];
+					sum[i] = count;
+					count = 1;
+				}
+
+				var resultNum = new Array();
+				for(var i = 0; i < yuansu.length; i++) {
+					resultNum[i] = {
+						"key": yuansu[i],
+						"value": sum[i]
+					}
+				}
+
+				return resultNum;
+
+			}
+
+			function transform(obj) {
+				var arr = [];
+				for(var item in obj) {
+					arr.push(obj[item]);
+				}
+				return arr;
+			}
+
+			function dateAdd(strInterval, NumDay, dtDate) {
+				var dtTmp = new Date(dtDate);
+				if(isNaN(dtTmp)) dtTmp = new Date();
+				switch(strInterval) {
+					case "s":
+						return new Date(Date.parse(dtTmp) + (1000 * NumDay));
+					case "n":
+						return new Date(Date.parse(dtTmp) + (60000 * NumDay));
+					case "h":
+						return new Date(Date.parse(dtTmp) + (3600000 * NumDay));
+					case "d":
+						return new Date(Date.parse(dtTmp) + (86400000 * NumDay));
+					case "w":
+						return new Date(Date.parse(dtTmp) + ((86400000 * 7) * NumDay));
+					case "m":
+						return new Date(dtTmp.getFullYear(), (dtTmp.getMonth()) + NumDay, dtTmp.getDate(), dtTmp.getHours(), dtTmp.getMinutes(), dtTmp.getSeconds());
+					case "y":
+						return new Date((dtTmp.getFullYear() + NumDay), dtTmp.getMonth(), dtTmp.getDate(), dtTmp.getHours(), dtTmp.getMinutes(), dtTmp.getSeconds());
+				}
+			}
+
+			function newAdd(i, dtDate) {
+				str = formatDate(dateAdd("d", i, dtDate));
+				return str;
+			}
+
+			function daysBetween(DateOne, DateTwo) {
+				var OneMonth = DateOne.substring(5, DateOne.lastIndexOf('-'));
+				var OneDay = DateOne.substring(DateOne.length, DateOne.lastIndexOf('-') + 1);
+				var OneYear = DateOne.substring(0, DateOne.indexOf('-'));
+				var TwoMonth = DateTwo.substring(5, DateTwo.lastIndexOf('-'));
+				var TwoDay = DateTwo.substring(DateTwo.length, DateTwo.lastIndexOf('-') + 1);
+				var TwoYear = DateTwo.substring(0, DateTwo.indexOf('-'));
+				var cha = ((Date.parse(OneMonth + '/' + OneDay + '/' + OneYear) - Date.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
+				return Math.abs(cha);
+			}
+
+			function getNowFormatDate() {
+				var date = new Date();
+				var seperator1 = "-";
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = year + seperator1 + month + seperator1 + strDate;
+				return currentdate;
+			}
+
+			function formatDate(date) {
+				var d = new Date(date),
+					month = '' + (d.getMonth() + 1),
+					day = '' + d.getDate(),
+					year = d.getFullYear();
+
+				if(month.length < 2) month = '0' + month;
+				if(day.length < 2) day = '0' + day;
+
+				return [year, month, day].join('-');
+			}*/
+		</script>
+	</body>
+
+</html>
