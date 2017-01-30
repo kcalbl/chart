@@ -11,14 +11,23 @@
 				margin: 0px;
 				padding: 0px;
 			}
+			#linkPieChart2{
+				display: block;
+				padding: 10px 5px 10px 1100px;
+				
+				
+			}
 		</style>
 	</head>
 
 	<body style="width: 100%; height: 100%;background-color: #eff0f5;">
-		<canvas id="chart1" style="border: 1px solid #000558;display: block;margin: 0px auto;">
+		<canvas id="chart1" style="display: block;margin: 0px auto;">
 			</canvas>
+			<a href="chart.html" id="linkPieChart2" >VOD新增用户性别分析</a>
 
 		<script type="text/javascript">
+		
+		
 			var chart1 = document.getElementById("chart1");
 			var context = chart1.getContext("2d");
 			chart1.width = 1366;
